@@ -1,5 +1,6 @@
 import logging
 import mech.mania.starter_pack.domain.decision_maker as decision_maker
+import mech.mania.starter_pack.domain.helpers as helpers
 
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
@@ -10,7 +11,8 @@ class Strategy:
     def __init__(self, memory):
         self.memory = memory
         self.logger = logging.getLogger('strategy')
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
+        logging.basicConfig(level = logging.INFO)
 
     def make_decision(self, player_name: str, game_state: GameState) -> CharacterDecision:
         """
@@ -25,7 +27,9 @@ class Strategy:
 
         self.logger.info("In make_decision")
 
-        decision = decision_maker.make_our_decision(self.api, self.my_player)
+        self.logger.info(helpers.TELL_ME_ME(self.my_player))
+
+        decision = None #decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision}")
         return decision
 

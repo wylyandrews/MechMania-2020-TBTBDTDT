@@ -1,11 +1,18 @@
+import logging
 import mech.mania.starter_pack.domain.helpers as helpers
 from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 
 
-def make_our_decision(api, my_player):
+def make_our_weapon_decision(api, my_player, logger):
+    my_weapon = my_player.get_weapon()
+    logger.info(my_weapon)
+    logger.info(my_player.inventory)
+    logger.info(my_weapon.get_attack())
+    return None
+
+def make_our_combat_decision(api, my_player):
     curr_pos = my_player.get_position()
-    enemies = api.find_enemies_by_distance(curr_pos)
     target_enemy = find_ideal_monster(api, my_player)
     enemy_pos = target_enemy.get_position()
 

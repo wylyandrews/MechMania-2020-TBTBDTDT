@@ -75,7 +75,7 @@ def make_our_combat_decision(api, my_player, logger, monsters):
         pos.y = my_player.get_position().y + my_player.get_speed()
         return CharacterDecision(
                 decision_type="MOVE",
-                action_position= pos,   #helpers.find_position_to_move(api, my_player, enemy_pos, logger),
+                action_position= helpers.find_position_to_move(api, my_player, enemy_pos, logger),
                 action_index=None), target_enemy
 
 

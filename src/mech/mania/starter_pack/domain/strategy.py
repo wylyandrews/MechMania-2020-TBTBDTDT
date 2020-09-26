@@ -38,7 +38,8 @@ class Strategy:
         #        action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
         #        action_index=None)
 
-        available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed())
+        available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
+        self.logger.info(f"Available items around: {available_items_tiles}")
         if available_items_tiles:
             decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
         else:

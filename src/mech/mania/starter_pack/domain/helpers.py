@@ -39,7 +39,7 @@ def get_equipment_level(player):
     return NotImplementedError
 
 # Returns a list of tuples of items and (x,y) coordinates
-def non_api_find_items(player: Player, board: Board, range_val):
+def non_api_find_items(player: Player, board: Board, range_val, logger):
     current_location = player.get_position()
     available_items = list()
     for i in range(-1*range_val, range_val+1):
@@ -50,19 +50,21 @@ def non_api_find_items(player: Player, board: Board, range_val):
             y = current_location.y + j
             if y < 0 or y >= board.height:
                 continue
-
-            items = get_tile_items(board, x, y)
+            
+            items = get_tile_items(board, x, y, logger)
+            
             for item in items:
                 available_items.append((item, x, y))
     
     return available_items
 
-def get_tile_items(board, x, y):
+def get_tile_items(board, x, y, logger):
     tile = None
     try:
         tile = board.grid[x][y]
     except:
         return list()
+    logger.info(f"Checking tile: {tile.__dict__}")
     if tile.type == "VOID" or tile.type == "IMPASSABLE" or x < 0 or y < 0:
         return list()
     return tile.items

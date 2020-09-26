@@ -1,10 +1,10 @@
 import logging
+import mech.mania.starter_pack.domain.decision_maker as decision_maker
 
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
 from mech.mania.starter_pack.domain.model.game_state import GameState
 from mech.mania.starter_pack.domain.api import API
-
 
 class Strategy:
     def __init__(self, memory):
@@ -25,6 +25,11 @@ class Strategy:
 
         self.logger.info("In make_decision")
 
+        decision = decision_maker.make_our_decision(self.api, self.my_player)
+        self.logger.info(f"We are doing {decision}")
+        return decision
+
+        """
         last_action, type = self.memory.get_value("last_action", str)
         if last_action is not None and last_action == "PICKUP":
             self.memory.set_value("last_action", "EQUIP")
@@ -65,10 +70,11 @@ class Strategy:
         self.memory.set_value("last_action", "MOVE")
         decision = CharacterDecision(
             decision_type="MOVE",
-            action_position=find_position_to_move(self.my_player, enemy_pos),
+            action_position=self.find_position_to_move(self.my_player, enemy_pos),
             action_index=None
         )
         return decision
+        """
 
 
     # feel free to write as many helper functions as you need!

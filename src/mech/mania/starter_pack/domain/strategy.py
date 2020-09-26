@@ -29,7 +29,7 @@ class Strategy:
         target_monster = None
         self.logger.info("In make_decision")
 
-        #self.logger.info(helpers.TELL_ME_ME(self.my_player))
+        # self.logger.info(helpers.TELL_ME_ME(self.my_player))
 
         ######################## TAKE TURN HERE ########################
         # self.logger.info(f"All monsters: {game_state.get_all_monsters()}")
@@ -38,8 +38,13 @@ class Strategy:
         #        action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
         #        action_index=None)
 
+        item_index = helpers.should_we_equip(self.my_player, self.logger)
+
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         self.logger.info(f"Available items around: {available_items_tiles}")
+
+        if item_index != -1:
+            decision = decision_maker.equip_given_item(item_index)
         if available_items_tiles:
             decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
         else:

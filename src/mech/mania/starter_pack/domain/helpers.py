@@ -1,8 +1,15 @@
 import logging
 
+import mech.mania.starter_pack.domain.bestitem as bestitem
+
 from mech.mania.starter_pack.domain.model.board.board import Board
 from mech.mania.starter_pack.domain.model.characters.player import Player
 from mech.mania.starter_pack.domain.model.characters.position import Position
+from mech.mania.starter_pack.domain.model.items.shoes import Shoes
+from mech.mania.starter_pack.domain.model.items.weapon import Weapon
+from mech.mania.starter_pack.domain.model.items.clothes import Clothes
+from mech.mania.starter_pack.domain.model.items.hat import Hat
+from mech.mania.starter_pack.domain.model.items.accessory import Accessory
 
 def NONAPI_find_position_to_move(player: Player, destination: Position) -> Position:
     return NotImplementedError
@@ -68,3 +75,10 @@ def get_tile_items(board, x, y, logger):
     if tile.type == "VOID" or tile.type == "IMPASSABLE" or x < 0 or y < 0:
         return list()
     return tile.items
+
+def should_we_equip(player, logger):
+    for t in [Weapon, Clothes, Shoes, Hat, Accessory]:
+        best_thing_index = bestitem.get_best_item(player, t)
+        if best_thing_index > -1:
+            return best_thing_index
+    return -1

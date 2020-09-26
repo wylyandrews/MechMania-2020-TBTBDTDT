@@ -4,6 +4,7 @@ from mech.mania.starter_pack.domain.model.items.clothes import Clothes
 from mech.mania.starter_pack.domain.model.items.hat import Hat
 from mech.mania.starter_pack.domain.model.items.accessory import Accessory
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
+
 def get_best_item(player, item_type):
     #get inventory
     inventory = player.inventory

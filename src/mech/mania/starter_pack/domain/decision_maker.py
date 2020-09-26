@@ -36,6 +36,11 @@ def loot_items(api, my_player, logger, board, item_tiles):
                 action_index=0
             )"""
 
+def equip_given_item(inventory_index):
+    return CharacterDecision(
+        decision_type="EQUIP",
+        action_position=None,
+        action_index=inventory_index)
 
 def head_to_portal_decision(api, my_player, logger):
     my_position = my_player.get_position()

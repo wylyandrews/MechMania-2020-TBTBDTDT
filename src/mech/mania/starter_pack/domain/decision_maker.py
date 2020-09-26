@@ -5,8 +5,26 @@ from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
 
+# pickup items in grid around you
+def loot_items(api, my_player, logger, board, item_tiles):
+    #### grab one based on closeness ####
+    current_tile_items = board.get_tile_at(my_player.get_position()).items
+    if current_tile_items is not None and len(current_tile_items) > 0:
+        return CharacterDecision(
+            decision_type="PICKUP",
+            action_position=None,
+            action_index=0
+        )
+    
+    item_tiles.sort(key=lambda x: Position(x[1], x[2], my_player.get_position().board_id).manhattan_distance(my_player.get_position()))
+    return CharacterDecision(
+        decision_type="MOVE",
+        action_position=item_tiles[0],
+        action_index=0
+    )
+
 # Expected to grab all items in vicinity (assuming there's an empty inventory slot)
-def loot_an_item(api, my_player, logger):
+"""def loot_an_item(api, my_player, logger):
     available_items = api.find_items_in_range_by_distance(my_player.get_position(), 5)
 
     tile_items = self.board.get_tile_at(self.curr_pos).items
@@ -16,7 +34,7 @@ def loot_an_item(api, my_player, logger):
                 decision_type="PICKUP",
                 action_position=None,
                 action_index=0
-            )
+            )"""
 
 
 def head_to_portal_decision(api, my_player, logger):
@@ -53,9 +71,8 @@ def make_our_combat_decision(api, my_player, logger, monsters):
             action_index=None
         ), target_enemy
     else:
-        pos = Position()
-        pos.x = my_player.get_position()
-        pos.y = my_player.get_position() + my_player.get_speed()
+        pos = Position(my_player.get_position())
+        pos.y = my_player.get_position().y + my_player.get_speed()
         return CharacterDecision(
                 decision_type="MOVE",
                 action_position= pos,   #helpers.find_position_to_move(api, my_player, enemy_pos, logger),

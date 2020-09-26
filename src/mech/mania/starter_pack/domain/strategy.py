@@ -45,7 +45,7 @@ class Strategy:
 
         if item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
-        if available_items_tiles:
+        elif available_items_tiles:
             decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
         else:
             decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)

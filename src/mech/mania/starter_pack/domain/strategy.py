@@ -30,14 +30,15 @@ class Strategy:
         #self.logger.info(helpers.TELL_ME_ME(self.my_player))
 
         ######################## TAKE TURN HERE ########################
-        target_monster = game_state.get_all_monsters()[0]
-        decision = CharacterDecision(
-                decision_type="MOVE",
-                action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
-                action_index=None)
-        # decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger)
+        # self.logger.info(f"All monsters: {game_state.get_all_monsters()}")
+        #decision = CharacterDecision(
+        #        decision_type="MOVE",
+        #        action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
+        #        action_index=None)
+        decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, game_state.get_all_monsters())
         #decision = decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
+        # decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision}")
 
 

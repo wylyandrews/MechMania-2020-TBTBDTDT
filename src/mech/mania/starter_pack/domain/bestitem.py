@@ -87,13 +87,13 @@ def assign_shoes_point_value(shoes):
 	total_pv = 0
 	total_pv += shoes.stats.get_flat_speed_change() * shoes.stats.get_percent_speed_change()
 	if (shoes.stats.get_flat_health_change() > 1):
-		total_pv += shoes.get_flat_health_change()
+		total_pv += shoes.stats.get_flat_health_change()
 	if (shoes.stats.get_percent_health_change() > 1):
-		total_pv += (shoes.get_percent_health_change()/10)
+		total_pv += (shoes.stats.get_percent_health_change()/10)
 	if (shoes.stats.get_flat_defense_change() > 1):
 		total_pv += 10
 	if (shoes.stats.get_percent_defense_change() > 1):
-		total_pv += 5 + (shoes.get_defense_health_change()/10)
+		total_pv += 5 + (shoes.stat.s.get_defense_health_change()/10)
 	if (shoes.stats.get_flat_regen_per_turn() > 0):
 		total_pv += 3
 	return total_pv

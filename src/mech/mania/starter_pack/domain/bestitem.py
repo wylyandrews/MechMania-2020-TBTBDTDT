@@ -77,33 +77,36 @@ def assign_weapon_point_value(weapon):
 
 def assign_clothes_point_value(clothes):
     total_pv = 0
-    total_pv += clothes.get_flat_defence_change() * clothes.get_percent_defence_change()
-    total_pv += clothes.get_flat_health_change() * clothes.get_percent_health_change()
-    total_pv += clothes.get_flat_attack_change()
-    total_pv += clothes.get_flat_regen_per_turn()
+    total_pv += clothes.stats.get_flat_defense_change() * clothes.stats.get_percent_defense_change()
+    total_pv += clothes.stats.get_flat_health_change() * clothes.stats.get_percent_health_change()
+    total_pv += clothes.stats.get_flat_attack_change()
+    total_pv += clothes.stats.get_flat_regen_per_turn()
     return total_pv
 
 def assign_shoes_point_value(shoes):
 	total_pv = 0
-	total_pv += shoes.get_flat_speed_change()
-	total_pv += shoes.get_percent_speed_change()
-	if (shoes.get_flat_health_change() > 1):
+	total_pv += shoes.stats.get_flat_speed_change() * shoes.stats.get_percent_speed_change()
+	if (shoes.stats.get_flat_health_change() > 1):
 		total_pv += shoes.get_flat_health_change()
-	if (shoes.get_percent_health_change() > 1):
+	if (shoes.stats.get_percent_health_change() > 1):
 		total_pv += (shoes.get_percent_health_change()/10)
-	if (shoes.get_flat_defense_change() > 1):
+	if (shoes.stats.get_flat_defense_change() > 1):
 		total_pv += 10
-	if (shoes.get_percent_defense_change() > 1):
+	if (shoes.stats.get_percent_defense_change() > 1):
 		total_pv += 5 + (shoes.get_defense_health_change()/10)
-	if (shoes.get_flat_regen_per_turn() > 0):
+	if (shoes.stats.get_flat_regen_per_turn() > 0):
 		total_pv += 3
 	return total_pv
 
 def assign_hat_and_accessory_point_value(accessory):
     total_pv = 0
-    total_pv += accessory.get_flat_experience_change() * accessory.get_percent_experience_change()
-    total_pv += accessory.get_flat_defence_change()
-    total_pv += accessory.get_flat_health_change() * accessory.get_percent_health_change()
-    total_pv += accessory.get_flat_attack_change() * accessory.get_percent_attack_change()
-    total_pv += accessory.get_flat_regen_per_turn()
+    total_pv += accessory.stats.get_flat_experience_change() * accessory.get_percent_experience_change()
+    total_pv += accessory.stats.get_flat_defense_change()
+    total_pv += accessory.stats.get_flat_health_change() * accessory.get_percent_health_change()
+    total_pv += accessory.stats.get_flat_attack_change() * accessory.get_percent_attack_change()
+    total_pv += accessory.stats.get_flat_regen_per_turn()
+    if (type(accessory) is Accessory and accessory.get_magic_effect() is not None):
+        total_pv += 50
+    if (type(accessory) is Hat and accessory.magic_hat_effect() is not None):
+        total_pv += 50
     return total_pv

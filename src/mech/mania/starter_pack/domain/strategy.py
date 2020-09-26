@@ -23,7 +23,9 @@ class Strategy:
         ######################## Initialize ########################
         self.api = API(game_state, player_name)
         self.my_player = game_state.get_all_players()[player_name]
+        self.current_board = game_state.get_board(self.my_player.get_position().board_id)
         self.curr_pos = self.my_player.get_position()
+        self.monsters_on_board = {name:monster for name, monster in game_state.get_all_monsters().items() if monster.get_position().board_id == self.curr_pos.board_id}
         target_monster = None
         self.logger.info("In make_decision")
 
@@ -35,12 +37,18 @@ class Strategy:
         #        decision_type="MOVE",
         #        action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
         #        action_index=None)
-        decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, game_state.get_all_monsters())
+
+        available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed())
+        if available_items_tiles:
+            decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
+        else:
+            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
+        
         #decision = decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         # decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
-        self.logger.info(f"We are doing {decision}")
-
+        self.logger.info(f"We are doing {decision.__dict__}")
+        self.logger.info(f"Player experience: {self.my_player.get_total_experience()}")
 
         ######################## Logging ########################
         self.memory.set_value("last_decision", decision)

@@ -3,6 +3,19 @@ import mech.mania.starter_pack.domain.helpers as helpers
 from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 
+def head_to_portal_decision(api, my_player, logger):
+    my_position = my_player.get_position()
+    nearest_portal_pos = api.find_closest_portal(my_player.get_position())
+    if nearest_portal_pos.x == my_position.x and nearest_portal_pos.y == my_position.y:
+        return CharacterDecision(
+        decision_type="TRAVEL",
+        action_position=None,
+        action_index=0)
+    else:
+        return CharacterDecision(
+            decision_type="MOVE",
+            action_position=helpers.find_position_to_move(api, my_player, nearest_portal_pos),
+            action_index=None)
 
 def make_our_weapon_decision(api, my_player, logger):
     my_weapon = my_player.get_weapon()
@@ -11,7 +24,7 @@ def make_our_weapon_decision(api, my_player, logger):
     logger.info(my_weapon.get_attack())
     return None
 
-def make_our_combat_decision(api, my_player):
+def make_our_combat_decision(api, my_player, logger):
     curr_pos = my_player.get_position()
     target_enemy = find_ideal_monster(api, my_player)
     enemy_pos = target_enemy.get_position()
@@ -30,8 +43,12 @@ def make_our_combat_decision(api, my_player):
 
 
 def find_ideal_monster(api, my_player):
-    enemies = api.find_enemies_by_distance(my_player.get_position())
-    enemies.sort(key=lambda x: abs(my_player.get_level - x.get_level)) # Enemy closest to my level
+    enemies = api.find_enemies_by_distance(my_player.get_position()) 
+
+    # Sorts are really done from last to first
+    enemies.sort(key= lambda x: x.get_current_health()) # prioritize on current health
+    enemies.sort(key=lambda x: x.get_level()) # Prioritize lower level enemies
+    enemies.sort(key=lambda x: abs(my_player.get_level() - x.get_level())) # Enemy closest to my level
     return enemies[0]
 
     #if 1 <= my_level <= 2:

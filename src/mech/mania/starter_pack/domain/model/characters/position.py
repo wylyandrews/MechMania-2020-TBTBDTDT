@@ -8,6 +8,7 @@ class Position:
         self.x = position_proto.x
         self.y = position_proto.y
         self.board_id = position_proto.board_id
+        self.position_proto = position_proto
 
     @classmethod
     def create(cls, x, y, board_id):

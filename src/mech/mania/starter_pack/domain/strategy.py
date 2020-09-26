@@ -27,9 +27,11 @@ class Strategy:
 
         self.logger.info("In make_decision")
 
-        self.logger.info(helpers.TELL_ME_ME(self.my_player))
+        #self.logger.info(helpers.TELL_ME_ME(self.my_player))
 
-        decision = None #decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
+        decision = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger)
+        #decision = decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
+        #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision}")
         return decision
 
@@ -79,14 +81,3 @@ class Strategy:
         )
         return decision
         """
-
-
-    # feel free to write as many helper functions as you need!
-    def find_position_to_move(self, player: Position, destination: Position) -> Position:
-        path = self.api.find_path(player.get_position(), destination)
-        pos = None
-        if len(path) < player.get_speed():
-            pos = path[-1]
-        else:
-            pos = path[player.get_speed() - 1]
-        return pos

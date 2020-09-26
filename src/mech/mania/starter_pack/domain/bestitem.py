@@ -93,17 +93,17 @@ def assign_shoes_point_value(shoes):
 	if (shoes.stats.get_flat_defense_change() > 1):
 		total_pv += 10
 	if (shoes.stats.get_percent_defense_change() > 1):
-		total_pv += 5 + (shoes.stat.s.get_defense_health_change()/10)
+		total_pv += 5 + (shoes.stats.get_defense_health_change()/10)
 	if (shoes.stats.get_flat_regen_per_turn() > 0):
 		total_pv += 3
 	return total_pv
 
 def assign_hat_and_accessory_point_value(accessory):
     total_pv = 0
-    total_pv += accessory.stats.get_flat_experience_change() * accessory.get_percent_experience_change()
+    total_pv += accessory.stats.get_flat_experience_change() * accessory.stats.get_percent_experience_change()
     total_pv += accessory.stats.get_flat_defense_change()
-    total_pv += accessory.stats.get_flat_health_change() * accessory.get_percent_health_change()
-    total_pv += accessory.stats.get_flat_attack_change() * accessory.get_percent_attack_change()
+    total_pv += accessory.stats.get_flat_health_change() * accessory.stats.get_percent_health_change()
+    total_pv += accessory.stats.get_flat_attack_change() * accessory.stats.get_percent_attack_change()
     total_pv += accessory.stats.get_flat_regen_per_turn()
     if (type(accessory) is Accessory and accessory.get_magic_effect() is not None):
         total_pv += 50

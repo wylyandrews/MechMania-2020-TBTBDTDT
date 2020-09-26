@@ -1,3 +1,4 @@
+from mech.mania.starter_pack.domain.model.items.shoes import Shoes
 from mech.mania.starter_pack.domain.model.items.weapon import Weapon
 from mech.mania.starter_pack.domain.model.items.clothes import Clothes
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
@@ -15,25 +16,27 @@ def get_best_item(player, item_type):
             best_pv = best_weapon.assign_weapon_point_value()
             if best_pv > curr_pv:
                 return index
-<<<<<<< HEAD
+
     if (item_type is Clothes):
         curr_clothes = player.get_clothes()
-        curr_pv = curr_clothes.assign_clothes_point_value
+        curr_pv = curr_clothes.assign_clothes_point_value()
         our_items.sort(key=assign_clothes_point_value, reverse=True)
         if (len(our_items) > 0):
             index, best_clothes = our_items[0]
             best_pv = best_clothes.assign_clothes_point_value()
             if best_pv > curr_pv:
                 return index
-=======
-	elif (item_type is Shoes:
-		our_items.sort(key=assign_shoes_point_value, reverse=True)
-		if (len(our_items) > 0):
-			index, best_shoes = our_items[0]
-			best_pv = best_shoes.assign_shoes_point_value()
-			if best_pv > curr_pv:
-				return index
->>>>>>> 12538c4d9ebb199237e9a8661015230bfc183314
+
+    if (item_type is Shoes):
+        curr_shoes = player.get_shoes()
+        curr_pv = curr_shoes.assign_shoes_point_value()
+        our_items.sort(key=assign_shoes_point_value, reverse=True)
+        if (len(our_items) > 0):
+            index, best_shoes = our_items[0]
+            best_pv = best_shoes.assign_shoes_point_value()
+            if best_pv > curr_pv:
+                return index
+
     return -1
     #for index, item in our_weapons:
         
@@ -55,7 +58,6 @@ def assign_weapon_point_value(weapon):
         total_pv += 10
     return total_pv
 
-<<<<<<< HEAD
 def assign_clothes_point_value(clothes):
     total_pv = 0
     total_pv += clothes.get_flat_defence_change() * clothes.get_percent_defence_change()
@@ -63,10 +65,8 @@ def assign_clothes_point_value(clothes):
     total_pv += clothes.get_flat_attack_change()
     total_pv += clothes.get_flat_regen_per_turn()
     return total_pv
-=======
 def assign_shoes_point_value(shoes):
 	total_pv = 0
 	total_pv += shoes.get_flat_speed_change()
 	total_pv += shoes.get_percent_speed_change()
 	return total_pv
->>>>>>> 12538c4d9ebb199237e9a8661015230bfc183314

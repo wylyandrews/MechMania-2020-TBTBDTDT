@@ -3,6 +3,20 @@ import mech.mania.starter_pack.domain.helpers as helpers
 from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 
+# Expected to grab all items in vicinity (assuming there's an empty inventory slot)
+def loot_an_item(api, my_player, logger):
+    available_items = api.find_items_in_range_by_distance(my_player.get_position(), 5)
+
+    tile_items = self.board.get_tile_at(self.curr_pos).items
+    if tile_items is not None or len(tile_items) > 0:
+            self.memory.set_value("last_action", "PICKUP")
+            return CharacterDecision(
+                decision_type="PICKUP",
+                action_position=None,
+                action_index=0
+            )
+
+
 def head_to_portal_decision(api, my_player, logger):
     my_position = my_player.get_position()
     nearest_portal_pos = api.find_closest_portal(my_player.get_position())
@@ -24,6 +38,7 @@ def make_our_weapon_decision(api, my_player, logger):
     logger.info(my_weapon.get_attack())
     return None
 
+# Must return decision, target_monster
 def make_our_combat_decision(api, my_player, logger):
     curr_pos = my_player.get_position()
     target_enemy = find_ideal_monster(api, my_player)
@@ -34,12 +49,12 @@ def make_our_combat_decision(api, my_player, logger):
             decision_type="ATTACK",
             action_position=enemy_pos,
             action_index=None
-        )
+        ), target_enemy
     else:
         return CharacterDecision(
                 decision_type="MOVE",
                 action_position=helpers.find_position_to_move(api, my_player, enemy_pos),
-                action_index=None)
+                action_index=None), target_enemy
 
 
 def find_ideal_monster(api, my_player):

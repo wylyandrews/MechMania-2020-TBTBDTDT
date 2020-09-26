@@ -20,19 +20,34 @@ class Strategy:
         player_name (string): The name of your player
         game_state (GameState): The current game state
         """
+        ######################## Initialize ########################
         self.api = API(game_state, player_name)
         self.my_player = game_state.get_all_players()[player_name]
-        self.board = game_state.get_pvp_board()
         self.curr_pos = self.my_player.get_position()
-
+        target_monster = None
         self.logger.info("In make_decision")
 
         #self.logger.info(helpers.TELL_ME_ME(self.my_player))
 
-        decision = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger)
+        ######################## TAKE TURN HERE ########################
+        target_monster = game_state.get_all_monsters()[0]
+        decision = CharacterDecision(
+                decision_type="MOVE",
+                action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
+                action_index=None)
+        # decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger)
         #decision = decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision}")
+
+
+        ######################## Logging ########################
+        self.memory.set_value("last_decision", decision)
+        self.memory.set_value("last_target_monster", target_monster)
+        self.logger.info(f"{target_monster.__dict__}")
+        self.memory.set_value("last_current_health", self.my_player.current_health)
+
+        ######################## END TURN ########################
         return decision
 
         """

@@ -15,7 +15,13 @@ def get_best_item(player, item_type):
             best_pv = best_weapon.assign_weapon_point_value()
             if best_pv > curr_pv:
                 return index
-
+	elif (item_type is Shoes:
+		our_items.sort(key=assign_shoes_point_value, reverse=True)
+		if (len(our_items) > 0):
+			index, best_shoes = our_items[0]
+			best_pv = best_shoes.assign_shoes_point_value()
+			if best_pv > curr_pv:
+				return index
     return -1
     #for index, item in our_weapons:
         
@@ -36,4 +42,9 @@ def assign_weapon_point_value(weapon):
     if (weapon.get_range() > 1):
         total_pv += 10
     return total_pv
-    
+
+def assign_shoes_point_value(shoes):
+	total_pv = 0
+	total_pv += shoes.get_flat_speed_change()
+	total_pv += shoes.get_percent_speed_change()
+	return total_pv

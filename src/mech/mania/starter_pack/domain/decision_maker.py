@@ -3,6 +3,7 @@ import re
 import mech.mania.starter_pack.domain.helpers as helpers
 from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
+from mech.mania.starter_pack.domain.model.characters.position import Position
 
 # Expected to grab all items in vicinity (assuming there's an empty inventory slot)
 def loot_an_item(api, my_player, logger):
@@ -52,21 +53,27 @@ def make_our_combat_decision(api, my_player, logger, monsters):
             action_index=None
         ), target_enemy
     else:
+        pos = Position()
+        pos.x = my_player.get_position()
+        pos.y = my_player.get_position() + my_player.get_speed()
         return CharacterDecision(
                 decision_type="MOVE",
-                action_position=helpers.find_position_to_move(api, my_player, enemy_pos),
+                action_position= pos,   #helpers.find_position_to_move(api, my_player, enemy_pos, logger),
                 action_index=None), target_enemy
 
 
 def find_ideal_monster(api, my_player, monsters):
     #enemies = api.find_enemies_by_distance(my_player.get_position()) 
-    enemies = monsters
+    enemies = list(monsters.values())
     # Sorts are really done from last to first
-    enemies.sort(key= lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
+    enemies.sort(key=lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
     enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
     enemies.sort(key=lambda x: abs(my_player.get_level() - x.get_level())) # Enemy closest to my level
-    enemies.sort(key=lambda x: x.is_dead) # Sorts targets by live ones
-    return enemies[0]
+    enemies.sort(key=lambda x: x.is_dead()) # Sorts targets by live ones
+
+    chosen_monster = enemies[0]
+
+    return chosen_monster
 
 def get_monster_type(monster):
     return re.split("[0-9]", monster.name)[0]

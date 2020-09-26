@@ -57,8 +57,8 @@ class Player(character.Character):
 
     def has_magic_effect(self, effect):
         return isinstance(effect, str) and (
-            (self.hat is not None and self.hat.get_magic_effect == effect)
-            or (self.accessory is not None and self.accessory.get_magic_effect == effect))
+            (self.hat is not None and self.hat.magic_hat_effect() == effect)
+            or (self.accessory is not None and self.accessory.get_magic_effect() == effect))
 
     def get_speed(self):
         flat_change = 0
@@ -77,11 +77,11 @@ class Player(character.Character):
             percent_change += self.clothes.get_stats().get_percent_speed_change()
 
         if self.shoes is not None:
-            flat_change += self.shoes.get_stats.get_flat_speed_change()
+            flat_change += self.shoes.get_stats().get_flat_speed_change()
             percent_change += self.shoes.get_stats().get_percent_speed_change()
 
             if (self.has_magic_effect("SHOES_BOOST")):
-                flat_change += self.shoes.get_stats.get_flat_speed_change()
+                flat_change += self.shoes.get_stats().get_flat_speed_change()
 
         if self.weapon is not None:
             flat_change += self.weapon.get_stats().get_flat_speed_change()
@@ -114,7 +114,7 @@ class Player(character.Character):
             percent_change += self.clothes.get_stats().get_percent_health_change()
 
         if self.shoes is not None:
-            flat_change += self.shoes.get_stats.get_flat_health_change()
+            flat_change += self.shoes.get_stats().get_flat_health_change()
             percent_change += self.shoes.get_stats().get_percent_health_change()
 
         if self.weapon is not None:
@@ -148,7 +148,7 @@ class Player(character.Character):
             percent_change += self.clothes.get_stats().get_percent_attack_change()
 
         if self.shoes is not None:
-            flat_change += self.shoes.get_stats.get_flat_attack_change()
+            flat_change += self.shoes.get_stats().get_flat_attack_change()
             percent_change += self.shoes.get_stats().get_percent_attack_change()
 
         if self.weapon is not None:
@@ -185,10 +185,10 @@ class Player(character.Character):
             percent_change += self.clothes.get_stats().get_percent_defense_change()
 
             if (self.has_magic_effect("CLOTHES_BOOST")):
-                flat_change += self.clothes.get_stats.get_flat_defense_change()
+                flat_change += self.clothes.get_stats().get_flat_defense_change()
 
         if self.shoes is not None:
-            flat_change += self.shoes.get_stats.get_flat_defense_change()
+            flat_change += self.shoes.get_stats().get_flat_defense_change()
             percent_change += self.shoes.get_stats().get_percent_defense_change()
 
         if self.weapon is not None:

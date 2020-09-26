@@ -1,9 +1,21 @@
-
+import logging
+from mech.mania.starter_pack.domain.model.characters.player import Player
 from mech.mania.starter_pack.domain.model.characters.position import Position
 
+def NONAPI_find_position_to_move(player: Player, destination: Position) -> Position:
+    return NotImplementedError
+
+    pos = None
+    if len(path) < player.get_speed():
+        pos = path[-1]
+    else:
+        pos = path[player.get_speed() - 1]
+    return pos
+
 # feel free to write as many helper functions as you need!
-def find_position_to_move(api, player: Position, destination: Position) -> Position:
+def find_position_to_move(api, player: Player, destination: Position, logger) -> Position:
     path = api.find_path(player.get_position(), destination)
+    logger.info(f"Path: {path}")
     pos = None
     if len(path) < player.get_speed():
         pos = path[-1]

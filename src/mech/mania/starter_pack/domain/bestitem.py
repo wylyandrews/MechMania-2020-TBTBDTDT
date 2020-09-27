@@ -64,7 +64,7 @@ def assign_weapon_point_value(weapon):
     total_pv = 0
     total_pv += weapon.get_attack() * (.25+ (weapon.stats.get_flat_attack_change() * (1 + weapon.stats.get_percent_attack_change())/100))
     if (weapon.get_on_hit_effect() is not None):
-        total_pv = total_pv * (1 + weapon.get_on_hit_effect().get_turns_left()/10)
+        total_pv += (1 + weapon.get_on_hit_effect().get_turns_left()/10)
     if (weapon.get_splash_radius() > 1):
         total_pv += 2 ** (weapon.get_splash_radius())
     if (weapon.get_range() > 1):

@@ -1,4 +1,5 @@
 import logging
+import re
 
 import mech.mania.starter_pack.domain.bestitem as bestitem
 
@@ -85,3 +86,6 @@ def should_we_equip(player, available_items, logger):
         if best_item_index > -1:
             return best_item_index
     return -1
+
+def get_monster_type(monster):
+    return re.split("[0-9]", monster.name)[0]

@@ -1,5 +1,4 @@
 import logging
-import re
 import mech.mania.starter_pack.domain.helpers as helpers
 from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
@@ -124,6 +123,3 @@ def find_ideal_monster(api, my_player, monsters):
     chosen_monster = enemies[0]
 
     return chosen_monster
-
-def get_monster_type(monster):
-    return re.split("[0-9]", monster.name)[0]

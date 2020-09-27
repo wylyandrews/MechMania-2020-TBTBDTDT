@@ -49,16 +49,17 @@ class Strategy:
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
         self.logger.info(f"Available items around: {available_items_tiles}")
+        self.logger.info(f"Our inventory: {self.my_player.inventory}")
         self.logger.info(f"Our weapon actual: {self.my_player.get_weapon().__dict__}")
         self.logger.info(f"Our weapon: {self.my_player.get_weapon().stats.__dict__}")
         self.logger.info(f"Our clothes: {self.my_player.get_clothes().stats.__dict__}")
         self.logger.info(f"Our shoes: {self.my_player.get_shoes().stats.__dict__}")
         self.logger.info(f"Our hat: {self.my_player.get_hat().stats.__dict__}")
         self.logger.info(f"Our accessory: {self.my_player.get_accessory().stats.__dict__}")
-        
+    
         # best item to equip here!
         item_index = helpers.should_we_equip(self.my_player, available_items, self.logger)
-        
+        self.logger.info(f"Item index: {item_index}")
         # Find non-consumable items
         droppable_items = [(index, item) for index, item in enumerate(self.my_player.inventory) if type(item) in [Weapon, Clothes, Shoes, Hat, Accessory]]
         

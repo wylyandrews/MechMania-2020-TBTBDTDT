@@ -90,7 +90,7 @@ def assign_shoes_point_value(shoes):
 	if (shoes.stats.get_flat_defense_change() > 1):
 		total_pv += 10
 	if (shoes.stats.get_percent_defense_change() > 1):
-		total_pv += 5 + (shoes.stats.get_defense_health_change())
+		total_pv += 5 + (shoes.stats.get_percent_defense_change())
 	if (shoes.stats.get_flat_regen_per_turn() > 0):
 		total_pv += 3
 	return total_pv

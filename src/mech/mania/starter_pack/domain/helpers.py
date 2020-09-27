@@ -12,7 +12,7 @@ from mech.mania.starter_pack.domain.model.items.clothes import Clothes
 from mech.mania.starter_pack.domain.model.items.hat import Hat
 from mech.mania.starter_pack.domain.model.items.accessory import Accessory
 
-def NONAPI_find_position_to_move(player: Player, destination: Position) -> Position:
+"""def NONAPI_find_position_to_move(player: Player, destination: Position) -> Position:
     return NotImplementedError
 
     pos = None
@@ -20,18 +20,21 @@ def NONAPI_find_position_to_move(player: Player, destination: Position) -> Posit
         pos = path[-1]
     else:
         pos = path[player.get_speed() - 1]
-    return pos
+    return pos"""
 
 # feel free to write as many helper functions as you need!
 def find_position_to_move(api, player: Player, destination: Position, logger, graph) -> Position:
     #path = api.find_path(player.get_position(), destination)
-    path = graph.AStarSearch(player.get_position(), destination)
-    logger.info(f"Path: {path}")
+    path, _ = graph.AStarSearch(player.get_position(), destination)
     pos = None
+    logger.info(f"Path: {path}")
     if len(path) < player.get_speed():
-        pos = path[-1]
+        coordinates = path[-1]
+        pos = Position.create(coordinates[0], coordinates[1], player.get_position().board_id)
     else:
-        pos = path[player.get_speed() - 1]
+        coordinates = path[player.get_speed()]
+        pos = Position.create(coordinates[0], coordinates[1], player.get_position().board_id)
+    logger.info(f"target destination: {coordinates}")
     return pos
 
 def TELL_ME_ME(player):
@@ -60,7 +63,7 @@ def non_api_find_items(player: Player, board: Board, range_val, logger):
             if y < 0 or y >= board.height:
                 continue
 
-            if abs(i) + abs(x) > range_val:
+            if abs(i) + abs(j) > range_val:
                 continue
             
             items = get_tile_items(board, x, y, logger)

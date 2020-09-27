@@ -33,7 +33,7 @@ class Strategy:
         self.curr_pos = self.my_player.get_position()
         self.monsters_on_board = {name:monster for name, monster in game_state.get_all_monsters().items() if monster.get_position().board_id == self.curr_pos.board_id}
         target_monster = None
-        self.searching_graph = search.Graph(self.current_board)
+        self.searching_graph = search.Graph(self.current_board, self.my_player.get_position().board_id)
         self.logger.info("In make_decision")
 
         # self.logger.info(helpers.TELL_ME_ME(self.my_player))
@@ -48,21 +48,25 @@ class Strategy:
         # Combine nearby items with inventory items
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
+        self.logger.info(f"My Player: {self.my_player.__dict__}")
+        self.logger.info(f"Current position: {self.curr_pos.__dict__}")
         self.logger.info(f"Available items around: {available_items_tiles}")
+        self.logger.info(f"Our inventory: {self.my_player.inventory}")
+        self.logger.info(f"Our weapon actual: {self.my_player.get_weapon().__dict__}")
         self.logger.info(f"Our weapon: {self.my_player.get_weapon().stats.__dict__}")
         self.logger.info(f"Our clothes: {self.my_player.get_clothes().stats.__dict__}")
         self.logger.info(f"Our shoes: {self.my_player.get_shoes().stats.__dict__}")
         self.logger.info(f"Our hat: {self.my_player.get_hat().stats.__dict__}")
         self.logger.info(f"Our accessory: {self.my_player.get_accessory().stats.__dict__}")
-        
+    
         # best item to equip here!
         item_index = helpers.should_we_equip(self.my_player, available_items, self.logger)
-        
+        self.logger.info(f"Item index: {item_index}")
         # Find non-consumable items
         droppable_items = [(index, item) for index, item in enumerate(self.my_player.inventory) if type(item) in [Weapon, Clothes, Shoes, Hat, Accessory]]
         
         if item_index != -1 and item_index >= len(self.my_player.inventory):
-            target_item, x, y = available_items_tiles[item_index]
+            target_item, x, y = available_items_tiles[item_index - len(self.my_player.inventory)]
             if x != self.curr_pos.x or y != self.curr_pos.y:
                 pos = Position.create(x, y, self.curr_pos.board_id)
                 decision = decision_maker.head_to(pos)
@@ -74,7 +78,7 @@ class Strategy:
         elif item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
         elif helpers.monsters_in_range(self.my_player, list(self.monsters_on_board.values())):
-            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
+            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board, self.searching_graph)
         elif droppable_items:
             index, item = droppable_items[0]
             decision = decision_maker.drop_item(index)
@@ -87,6 +91,10 @@ class Strategy:
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         # decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision.__dict__}")
+        try:
+            self.logger.info(f"Position is: {decision.action_position.__dict__}")
+        except:
+            pass
         self.logger.info(f"Player experience: {self.my_player.get_total_experience()}")
 
         ######################## Logging ########################

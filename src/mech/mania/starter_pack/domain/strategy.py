@@ -47,6 +47,7 @@ class Strategy:
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
         self.logger.info(f"Available items around: {available_items_tiles}")
+        self.logger.info(f"Our weapon: {self.my_player.get_weapon()}")
         
         # best item to equip here!
         item_index = helpers.should_we_equip(self.my_player, available_items, self.logger)
@@ -57,7 +58,7 @@ class Strategy:
         if item_index != -1 and item_index >= len(self.my_player.inventory):
             target_item, x, y = available_items_tiles[item_index]
             if x != self.curr_pos.x or y != self.curr_pos.y:
-                pos = Position(x, y, self.curr_pos.board_id)
+                pos = Position.create(x, y, self.curr_pos.board_id)
                 decision = decision_maker.head_to(pos)
             else:
                 if len(self.my_player.inventory) >= 16:
@@ -85,7 +86,7 @@ class Strategy:
         ######################## Logging ########################
         self.memory.set_value("last_decision", decision)
         self.memory.set_value("last_target_monster", target_monster)
-        self.logger.info(f"{target_monster.__dict__}")
+        self.logger.info(f"{target_monster.__dict__ if target_monster else 'None'}")
         self.memory.set_value("last_current_health", self.my_player.current_health)
 
         ######################## END TURN ########################

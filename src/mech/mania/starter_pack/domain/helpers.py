@@ -57,6 +57,9 @@ def non_api_find_items(player: Player, board: Board, range_val, logger):
             y = current_location.y + j
             if y < 0 or y >= board.height:
                 continue
+
+            if abs(i) + abs(x) > range_val:
+                continue
             
             items = get_tile_items(board, x, y, logger)
             

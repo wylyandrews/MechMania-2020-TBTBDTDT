@@ -112,10 +112,11 @@ def make_our_combat_decision(api, my_player, logger, monsters):
 
 
 def find_ideal_monster(api, my_player, monsters):
-    enemies = [enemy for enemy in api.find_enemies_by_distance(my_player.get_position()) if enemy.get_position().board_id == my_player.get_position().board_id]  
-    #enemies = list(monsters.values())
+    #enemies = [enemy for enemy in api.find_enemies_by_distance(my_player.get_position()) if enemy.get_position().board_id == my_player.get_position().board_id]  
+    enemies = list(monsters.values())
     # Sorts are really done from last to first
     enemies.sort(key=lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
+    enemies.sort(key=lambda x: my_player.get_position().manhattan_distance(x.get_position())) # Distance to enemy
     enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
     enemies.sort(key=lambda x: abs(my_player.get_level() - x.get_level())) # Enemy closest to my level
     enemies.sort(key=lambda x: x.is_dead()) # Sorts targets by live ones

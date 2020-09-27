@@ -10,7 +10,7 @@ def get_best_item(player, available_items, item_type):
     if (item_type is Weapon):
         curr_weapon = player.get_weapon()
         curr_pv = assign_weapon_point_value(curr_weapon)
-        our_items.sort(key=assign_weapon_point_value, reverse=True)
+        our_items.sort(key=lambda x: assign_weapon_point_value(x[1]), reverse=True)
         if (len(our_items) > 0):
             index, best_weapon = our_items[0]
             best_pv = assign_weapon_point_value(best_weapon)
@@ -20,7 +20,7 @@ def get_best_item(player, available_items, item_type):
     if (item_type is Clothes):
         curr_clothes = player.get_clothes()
         curr_pv = assign_clothes_point_value(curr_clothes)
-        our_items.sort(key=assign_clothes_point_value, reverse=True)
+        our_items.sort(key=lambda x: assign_clothes_point_value(x[1]), reverse=True)
         if (len(our_items) > 0):
             index, best_clothes = our_items[0]
             best_pv = assign_clothes_point_value(best_clothes)
@@ -30,7 +30,7 @@ def get_best_item(player, available_items, item_type):
     if (item_type is Shoes):
         curr_shoes = player.get_shoes()
         curr_pv = assign_shoes_point_value(curr_shoes)
-        our_items.sort(key=assign_shoes_point_value, reverse=True)
+        our_items.sort(key=lambda x: assign_shoes_point_value(x[1]), reverse=True)
         if (len(our_items) > 0):
             index, best_shoes = our_items[0]
             best_pv = assign_shoes_point_value(best_shoes)
@@ -40,7 +40,7 @@ def get_best_item(player, available_items, item_type):
     if (item_type is Hat):
         curr_hat = player.get_hat()
         curr_pv = assign_hat_and_accessory_point_value(curr_hat)
-        our_items.sort(key=assign_hat_and_accessory_point_value, reverse=True)
+        our_items.sort(key=lambda x: assign_hat_and_accessory_point_value(x[1]), reverse=True)
         if (len(our_items) > 0):
             index, best_hat = our_items[0]
             best_pv = assign_hat_and_accessory_point_value(best_hat)
@@ -50,7 +50,7 @@ def get_best_item(player, available_items, item_type):
     if (item_type is Accessory):
         curr_accessory = player.get_accessory()
         curr_pv = assign_hat_and_accessory_point_value(curr_accessory)
-        our_items.sort(key=assign_hat_and_accessory_point_value, reverse=True)
+        our_items.sort(key=lambda x: assign_hat_and_accessory_point_value(x[1]), reverse=True)
         if (len(our_items) > 0):
             index, best_accessory = our_items[0]
             best_pv = assign_hat_and_accessory_point_value(best_accessory)

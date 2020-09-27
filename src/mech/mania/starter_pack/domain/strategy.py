@@ -96,7 +96,10 @@ class Strategy:
         except:
             pass
         self.logger.info(f"Player experience: {self.my_player.get_total_experience()}")
-
+        #try:
+            # self.logger.info(f"====near target monsters=== {[mon.__dict__ for mon in list(self.monsters_on_board.values()) if abs(self.my_player.get_level() - mon.get_level()) < 4][:9]}")
+        #except:
+        #    self.logger.info(f"======================log failed")
         ######################## Logging ########################
         self.memory.set_value("last_decision", decision)
         self.memory.set_value("last_target_monster", target_monster)

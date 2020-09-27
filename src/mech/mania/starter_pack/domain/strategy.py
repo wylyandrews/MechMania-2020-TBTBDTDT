@@ -60,7 +60,10 @@ class Strategy:
                 pos = Position(x, y, self.curr_pos.board_id)
                 decision = decision_maker.head_to(pos)
             else:
-                decision = decision_maker.pickup(self.my_player, target_item, self.current_board)
+                if len(self.my_player.inventory) >= 16:
+                    self.logger.warning("==================INVENTORY FULL??? pOG================")
+                else:
+                    decision = decision_maker.pickup(self.my_player, target_item, self.current_board)
         elif item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
 

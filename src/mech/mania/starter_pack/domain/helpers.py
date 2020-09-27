@@ -91,7 +91,7 @@ def get_monster_type(monster):
     return re.split("[0-9]", monster.name)[0]
 
 def monsters_in_range(player, monsters):
-	aggro_monsters = []
+	aggro_monsters = list()
 	for monster in monsters:
 		player_location = player.get_position()
 		monster_location = monster.get_position()

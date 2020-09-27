@@ -71,13 +71,13 @@ class Strategy:
                     decision = decision_maker.pickup(self.my_player, target_item, self.current_board)
         elif item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
-
+        elif helpers.monsters_in_range(self.my_player, list(self.monsters_on_board.values())):
+            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
         elif droppable_items:
             index, item = droppable_items[0]
             decision = decision_maker.drop_item(index)
         #elif available_items_tiles:
         #    decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
-
         else:
             decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
         

@@ -48,6 +48,8 @@ class Strategy:
         # Combine nearby items with inventory items
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
+        self.logger.info(f"My Player: {self.my_player.__dict__}")
+        self.logger.info(f"Current position: {self.curr_pos.__dict__}")
         self.logger.info(f"Available items around: {available_items_tiles}")
         self.logger.info(f"Our inventory: {self.my_player.inventory}")
         self.logger.info(f"Our weapon actual: {self.my_player.get_weapon().__dict__}")
@@ -64,7 +66,7 @@ class Strategy:
         droppable_items = [(index, item) for index, item in enumerate(self.my_player.inventory) if type(item) in [Weapon, Clothes, Shoes, Hat, Accessory]]
         
         if item_index != -1 and item_index >= len(self.my_player.inventory):
-            target_item, x, y = available_items_tiles[item_index]
+            target_item, x, y = available_items_tiles[item_index - len(self.my_player.inventory)]
             if x != self.curr_pos.x or y != self.curr_pos.y:
                 pos = Position.create(x, y, self.curr_pos.board_id)
                 decision = decision_maker.head_to(pos)
@@ -89,6 +91,10 @@ class Strategy:
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         # decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)
         self.logger.info(f"We are doing {decision.__dict__}")
+        try:
+            self.logger.info(f"Position is: {decision.action_position.__dict__}")
+        except:
+            pass
         self.logger.info(f"Player experience: {self.my_player.get_total_experience()}")
 
         ######################## Logging ########################

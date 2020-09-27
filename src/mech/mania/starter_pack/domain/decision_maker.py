@@ -116,8 +116,11 @@ def find_ideal_monster(api, my_player, monsters):
     # Sorts are really done from last to first
     enemies.sort(key=lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
     enemies.sort(key=lambda x: my_player.get_position().manhattan_distance(x.get_position())) # Distance to enemy
-    enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
-    enemies.sort(key=lambda x: abs(my_player.get_level() - x.get_level())) # Enemy closest to my level
+    if my_player.get_weapon().get_attack() > 4:
+        enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
+        enemies.sort(key=lambda x: abs(my_player.get_level() - x.get_level())) # Enemy closest to my level
+    else:
+        enemies.sort(key=lambda x: x.get_level()) # Prioritize lower level enemies
     enemies.sort(key=lambda x: x not in helpers.monsters_in_range(my_player, enemies)) # Enemies that are in aggro
     enemies.sort(key=lambda x: x.is_dead()) # Sorts targets by live ones
 

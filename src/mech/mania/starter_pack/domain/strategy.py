@@ -33,7 +33,7 @@ class Strategy:
         self.curr_pos = self.my_player.get_position()
         self.monsters_on_board = {name:monster for name, monster in game_state.get_all_monsters().items() if monster.get_position().board_id == self.curr_pos.board_id}
         target_monster = None
-        self.searching_graph = search.Graph(self.current_board)
+        self.searching_graph = search.Graph(self.current_board, self.my_player.get_position().board_id)
         self.logger.info("In make_decision")
 
         # self.logger.info(helpers.TELL_ME_ME(self.my_player))
@@ -49,6 +49,7 @@ class Strategy:
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
         available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
         self.logger.info(f"Available items around: {available_items_tiles}")
+        self.logger.info(f"Our weapon actual: {self.my_player.get_weapon().__dict__}")
         self.logger.info(f"Our weapon: {self.my_player.get_weapon().stats.__dict__}")
         self.logger.info(f"Our clothes: {self.my_player.get_clothes().stats.__dict__}")
         self.logger.info(f"Our shoes: {self.my_player.get_shoes().stats.__dict__}")
@@ -74,7 +75,7 @@ class Strategy:
         elif item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
         elif helpers.monsters_in_range(self.my_player, list(self.monsters_on_board.values())):
-            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
+            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board, self.searching_graph)
         elif droppable_items:
             index, item = droppable_items[0]
             decision = decision_maker.drop_item(index)

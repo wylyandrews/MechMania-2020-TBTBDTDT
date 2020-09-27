@@ -1,14 +1,15 @@
 
 class Graph():
     def __init__(self, board):
-        self.barriers = []
-        self.set_barriers(board)
+        self.barriers = list()
+        self.board = board
+        self.set_barriers()
     def get_barriers(self):
         return self.barriers
-    def set_barriers(self, board):
-        for x in range(board.width):
-            for y in range(board.height):
-                tile = board.grid[x][y]
+    def set_barriers(self):
+        for x in range(self.board.width):
+            for y in range(self.board.height):
+                tile = self.board.grid[x][y]
                 if tile.type == "VOID" or tile.type == "IMPASSIBLE":
                     self.barriers.append(tile)
 
@@ -22,25 +23,25 @@ class Graph():
                 return 100 #Extremely high cost to enter barrier squares
         return 1 #Normal movement cost
 
-    def get_vertex_neighbours(self, pos, board):
+    def get_vertex_neighbours(self, pos):
         n = []
         #Moves allow link a chess king
         for dx, dy in [(1,0),(-1,0),(0,1),(0,-1)]:
             x2 = pos.x + dx
             y2 = pos.y + dy
-            if x2 < 0 or x2 >= board.width or y2 < 0 or y2 >= board.height:
+            if x2 < 0 or x2 >= self.board.width or y2 < 0 or y2 >= self.board.height:
                 continue
             n.append((x2, y2))
         return n
 
-    def AStarSearch(self, start, end, board):
+    def AStarSearch(self, start, end):
     
         G = {} #Actual movement cost to each position from the start position
         F = {} #Estimated movement cost of start to end going via this position
     
         #Initialize starting values
         G[start] = 0 
-        F[start] = heuristic(start, end)
+        F[start] = self.heuristic(start, end)
     
         closedVertices = set()
         openVertices = set([start])
@@ -70,10 +71,10 @@ class Graph():
             closedVertices.add(current)
     
             #Update scores for vertices near the current position
-            for neighbour in get_vertex_neighbours(current, board):
+            for neighbour in self.get_vertex_neighbours(current):
                 if neighbour in closedVertices: 
                     continue #We have already processed this node exhaustively
-                candidateG = G[current] + move_cost(current, neighbour)
+                candidateG = G[current] + self.move_cost(current, neighbour)
     
                 if neighbour not in openVertices:
                     openVertices.add(neighbour) #Discovered a new vertex
@@ -83,7 +84,5 @@ class Graph():
                 #Adopt this G score
                 cameFrom[neighbour] = current
                 G[neighbour] = candidateG
-                H = heuristic(neighbour, end)
+                H = self.heuristic(neighbour, end)
                 F[neighbour] = G[neighbour] + H
- 
-	    raise RuntimeError("A* failed to find a solution")

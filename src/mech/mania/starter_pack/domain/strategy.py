@@ -1,6 +1,7 @@
 import logging
 import mech.mania.starter_pack.domain.decision_maker as decision_maker
 import mech.mania.starter_pack.domain.helpers as helpers
+import mech.mania.starter_pack.domain.search as search
 
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
@@ -32,6 +33,7 @@ class Strategy:
         self.curr_pos = self.my_player.get_position()
         self.monsters_on_board = {name:monster for name, monster in game_state.get_all_monsters().items() if monster.get_position().board_id == self.curr_pos.board_id}
         target_monster = None
+        self.searching_graph = search.Graph(self.current_board)
         self.logger.info("In make_decision")
 
         # self.logger.info(helpers.TELL_ME_ME(self.my_player))
@@ -79,7 +81,7 @@ class Strategy:
         #elif available_items_tiles:
         #    decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
         else:
-            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
+            decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board, self.searching_graph)
         
         #decision = decision_maker.make_our_weapon_decision(self.api, self.my_player, self.logger)
         #decision = decision_maker.head_to_portal_decision(self.api, self.my_player, self.logger)

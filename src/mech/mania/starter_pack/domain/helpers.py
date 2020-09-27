@@ -23,8 +23,9 @@ def NONAPI_find_position_to_move(player: Player, destination: Position) -> Posit
     return pos
 
 # feel free to write as many helper functions as you need!
-def find_position_to_move(api, player: Player, destination: Position, logger) -> Position:
-    path = api.find_path(player.get_position(), destination)
+def find_position_to_move(api, player: Player, destination: Position, logger, graph) -> Position:
+    #path = api.find_path(player.get_position(), destination)
+    path = graph.AStarSearch(player.get_position(), destination)
     logger.info(f"Path: {path}")
     pos = None
     if len(path) < player.get_speed():

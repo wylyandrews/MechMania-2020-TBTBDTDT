@@ -90,7 +90,7 @@ def make_our_weapon_decision(api, my_player, logger):
     return None
 
 # Must return decision, target_monster
-def make_our_combat_decision(api, my_player, logger, monsters):
+def make_our_combat_decision(api, my_player, logger, monsters, searching_graph):
     curr_pos = my_player.get_position()
     target_enemy = find_ideal_monster(api, my_player, monsters)
     enemy_pos = target_enemy.get_position()
@@ -106,7 +106,7 @@ def make_our_combat_decision(api, my_player, logger, monsters):
         pos.y = my_player.get_position().y + my_player.get_speed()
         return CharacterDecision(
                 decision_type="MOVE",
-                action_position= helpers.find_position_to_move(api, my_player, enemy_pos, logger),
+                action_position= helpers.find_position_to_move(api, my_player, enemy_pos, logger, searching_graph),
                 action_index=None), target_enemy
 
 

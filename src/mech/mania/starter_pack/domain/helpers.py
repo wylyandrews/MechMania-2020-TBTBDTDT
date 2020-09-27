@@ -28,7 +28,7 @@ def find_position_to_move(api, player: Player, destination: Position, logger, gr
     path, _ = graph.AStarSearch(player.get_position(), destination)
     pos = None
     logger.info(f"Path: {path}")
-    if len(path) < player.get_speed():
+    if len(path) <= player.get_speed():
         coordinates = path[-1]
         pos = Position.create(coordinates[0], coordinates[1], player.get_position().board_id)
     else:

@@ -123,6 +123,7 @@ def find_ideal_monster(api, my_player, monsters):
         enemies.sort(key=lambda x: x.get_level()) # Prioritize lower level enemies
     #player_damage = my_player.get_weapon().get_attack() * my_player.get_attack()
     #enemies.sort(key=lambda x: 
+    enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Sociable Slime") #Prioritizes legfish over anything else
     enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Legfish") #Prioritizes legfish over anything else
     enemies.sort(key=lambda x: x not in helpers.monsters_in_range(my_player, enemies)) # Enemies that are in aggro
     enemies.sort(key=lambda x: x.is_dead()) # Sorts targets by live ones

@@ -75,7 +75,7 @@ def assign_weapon_point_value(weapon):
 def assign_clothes_point_value(clothes):
     total_pv = 0
     total_pv += clothes.stats.get_flat_defense_change() * (1 + clothes.stats.get_percent_defense_change())
-    total_pv += clothes.stats.get_flat_health_change() * (1 + clothes.stats.get_percent_health_change())
+    total_pv += clothes.stats.get_flat_health_change() * (1 + clothes.stats.get_percent_health_change())/10
     total_pv += clothes.stats.get_flat_attack_change()
     total_pv += clothes.stats.get_flat_regen_per_turn()
     return total_pv
@@ -99,7 +99,7 @@ def assign_hat_and_accessory_point_value(accessory):
     total_pv = 0
     total_pv += accessory.stats.get_flat_experience_change() * (1 + accessory.stats.get_percent_experience_change())
     total_pv += accessory.stats.get_flat_defense_change()
-    total_pv += accessory.stats.get_flat_health_change() * (1 + accessory.stats.get_percent_health_change())
+    total_pv += accessory.stats.get_flat_health_change() * (1 + accessory.stats.get_percent_health_change())/10
     total_pv += accessory.stats.get_flat_attack_change() * (1 + accessory.stats.get_percent_attack_change())
     total_pv += accessory.stats.get_flat_regen_per_turn()
     if (type(accessory) is Accessory and accessory.get_magic_effect() is not None):

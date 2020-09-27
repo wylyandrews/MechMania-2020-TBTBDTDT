@@ -76,9 +76,9 @@ def get_tile_items(board, x, y, logger):
         return list()
     return tile.items
 
-def should_we_equip(player, logger):
+def should_we_equip(player, available_items, logger):
     for t in [Weapon, Clothes, Shoes, Hat, Accessory]:
-        best_thing_index = bestitem.get_best_item(player, t)
-        if best_thing_index > -1:
-            return best_thing_index
+        best_item_index = bestitem.get_best_item(player, available_items, t)
+        if best_item_index > -1:
+            return best_item_index
     return -1

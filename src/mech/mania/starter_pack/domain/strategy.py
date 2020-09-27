@@ -4,6 +4,11 @@ import mech.mania.starter_pack.domain.helpers as helpers
 
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
+from mech.mania.starter_pack.domain.model.items.shoes import Shoes
+from mech.mania.starter_pack.domain.model.items.weapon import Weapon
+from mech.mania.starter_pack.domain.model.items.clothes import Clothes
+from mech.mania.starter_pack.domain.model.items.hat import Hat
+from mech.mania.starter_pack.domain.model.items.accessory import Accessory
 from mech.mania.starter_pack.domain.model.game_state import GameState
 from mech.mania.starter_pack.domain.api import API
 
@@ -38,15 +43,33 @@ class Strategy:
         #        action_position=Position(self.curr_pos.x+2, self.curr_pos.y, "tb_tbdt_dt"),
         #        action_index=None)
 
-        item_index = helpers.should_we_equip(self.my_player, self.logger)
-
+        # Combine nearby items with inventory items
         available_items_tiles = helpers.non_api_find_items(self.my_player, self.current_board, self.my_player.get_speed(), self.logger)
+        available_items = self.my_player.inventory + [tup[0] for tup in available_items_tiles]
         self.logger.info(f"Available items around: {available_items_tiles}")
-
-        if item_index != -1:
+        
+        # best item to equip here!
+        item_index = helpers.should_we_equip(self.my_player, available_items, self.logger)
+        
+        # Find non-consumable items
+        droppable_items = [(index, item) for index, item in enumerate(self.my_player.inventory) if type(item) in [Weapon, Clothes, Shoes, Hat, Accessory]]
+        
+        if item_index != -1 and item_index >= len(self.my_player.inventory):
+            target_item, x, y = available_items_tiles[item_index]
+            if x != self.curr_pos.x or y != self.curr_pos.y:
+                pos = Position(x, y, self.curr_pos.board_id)
+                decision = decision_maker.head_to(pos)
+            else:
+                decision = decision_maker.pickup(self.my_player, target_item, self.current_board)
+        elif item_index != -1:
             decision = decision_maker.equip_given_item(item_index)
-        elif available_items_tiles:
-            decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
+
+        elif droppable_items:
+            index, item = droppable_items[0]
+            decision = decision_maker.drop_item(index)
+        #elif available_items_tiles:
+        #    decision = decision_maker.loot_items(self.api, self.my_player, self.logger, self.current_board, available_items_tiles)
+
         else:
             decision, target_monster = decision_maker.make_our_combat_decision(self.api, self.my_player, self.logger, self.monsters_on_board)
         

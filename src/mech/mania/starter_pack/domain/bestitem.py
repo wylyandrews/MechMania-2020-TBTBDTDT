@@ -5,11 +5,8 @@ from mech.mania.starter_pack.domain.model.items.hat import Hat
 from mech.mania.starter_pack.domain.model.items.accessory import Accessory
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 
-def get_best_item(player, item_type):
-    #get inventory
-    inventory = player.inventory
-    
-    our_items = [(index, item) for index, item in enumerate(inventory) if type(item) is item_type]
+def get_best_item(player, available_items, item_type):
+    our_items = [(index, item) for index, item in enumerate(available_items) if type(item) is item_type]
     if (item_type is Weapon):
         curr_weapon = player.get_weapon()
         curr_pv = assign_weapon_point_value(curr_weapon)

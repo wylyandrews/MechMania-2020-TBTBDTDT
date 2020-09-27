@@ -5,6 +5,14 @@ from mech.mania.engine.domain.model import character_pb2
 from mech.mania.starter_pack.domain.model.characters.character_decision import CharacterDecision
 from mech.mania.starter_pack.domain.model.characters.position import Position
 
+
+def drop_item(index):
+    return CharacterDecision(
+        decision_type="DROP",
+        action_position=None,
+        action_index=index
+    )
+
 # pickup items in grid around you
 def loot_items(api, my_player, logger, board, item_tiles):
     #### grab one based on closeness ####
@@ -42,6 +50,25 @@ def equip_given_item(inventory_index):
         action_position=None,
         action_index=inventory_index)
 
+def pickup(player, item, board):
+    current_position = player.get_position()
+    x = current_position.x
+    y = current_position.y
+    tile = board.grid[x][y]
+    items = tile.items
+    return CharacterDecision(
+        decision_type="PICKUP",
+        action_position=None,
+        action_index=items.index(item)
+    )
+
+
+def head_to(given_position):
+    return CharacterDecision(
+        decision_type="MOVE",
+        action_position=given_position,
+        action_index=None
+    )
 def head_to_portal_decision(api, my_player, logger):
     my_position = my_player.get_position()
     nearest_portal_pos = api.find_closest_portal(my_player.get_position())
@@ -85,8 +112,8 @@ def make_our_combat_decision(api, my_player, logger, monsters):
 
 
 def find_ideal_monster(api, my_player, monsters):
-    #enemies = api.find_enemies_by_distance(my_player.get_position()) 
-    enemies = list(monsters.values())
+    enemies = [enemy for enemy in api.find_enemies_by_distance(my_player.get_position()) if enemy.get_position().board_id == my_player.get_position().board_id]  
+    #enemies = list(monsters.values())
     # Sorts are really done from last to first
     enemies.sort(key=lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
     enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies

@@ -64,7 +64,7 @@ class Strategy:
         self.logger.info(f"Item index: {item_index}")
         # Find non-consumable items
         droppable_items = [(index, item) for index, item in enumerate(self.my_player.inventory) if type(item) in [Weapon, Clothes, Shoes, Hat, Accessory]]
-        nearby_monsters = helpers.monsters_in_range(self.my_player, list(self.monseters_on_board.values()))
+        nearby_monsters = helpers.monsters_in_range(self.my_player, list(self.monsters_on_board.values()))
 
         if item_index != -1 and item_index >= len(self.my_player.inventory):
             target_item, x, y = available_items_tiles[item_index - len(self.my_player.inventory)]

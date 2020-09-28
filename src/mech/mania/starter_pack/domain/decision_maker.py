@@ -116,15 +116,15 @@ def find_ideal_monster(api, my_player, monsters):
     # Sorts are really done from last to first
     enemies.sort(key=lambda x: x.get_current_health() / x.get_max_health()) # prioritize on percentage of health
     enemies.sort(key=lambda x: my_player.get_position().manhattan_distance(x.get_position())) # Distance to enemy
-    if my_player.get_weapon().get_attack() > 4:
-        enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
-        enemies.sort(key=lambda x: abs((my_player.get_level()) - x.get_level())) # Enemy closest to my level
-    else:
-        enemies.sort(key=lambda x: x.get_level()) # Prioritize lower level enemies
+    enemies.sort(key=lambda x: -1 * x.get_level()) # Prioritize higher level enemies
+    #    enemies.sort(key=lambda x: abs((my_player.get_level()) - x.get_level())) # Enemy closest to my level
+    
     #player_damage = my_player.get_weapon().get_attack() * my_player.get_attack()
     #enemies.sort(key=lambda x: 
-    enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Sociable Slime") #Prioritizes legfish over anything else
-    enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Legfish") #Prioritizes legfish over anything else
+    #enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Sociable Slime") #Prioritizes legfish over anything else
+    #enemies.sort(key=lambda x: x.get_level() >= 9) # sort by enemies 9 and below
+    #enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Lesser Legfish") # Then do babbies
+    #enemies.sort(key=lambda x: helpers.get_monster_type(x) != "Legfish") #Prioritizes legfish over anything else
     enemies.sort(key=lambda x: x not in helpers.monsters_in_range(my_player, enemies)) # Enemies that are in aggro
     enemies.sort(key=lambda x: x.is_dead()) # Sorts targets by live ones
 
